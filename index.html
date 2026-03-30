@@ -795,20 +795,34 @@
             try {
                 const prompt = `You are an expert B2B lead generation researcher. I want to find companies in the "${industry}" industry targeting or located in "${locData.loc}". My base search is: "${baseKeyword}". Rephrase this into 10 different highly effective Google search queries to find business websites. Return ONLY a valid JSON array of 10 strings, with no markdown formatting or extra text.`;
 
-                const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`;
-                
-                const geminiRes = await fetch(geminiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        contents: [{ parts: [{ text: prompt }] }],
-                        generationConfig: { responseMimeType: "application/json" }
-                    })
-                });
+                // Safe model fallback loop for global deployment
+                const modelsToTry = ['gemini-3-flash-preview', 'gemini-2.5-flash', 'gemini-1.5-flash'];
+                let geminiData = null;
 
-                if (!geminiRes.ok) throw new Error(`Failed to reach Gemini API. Status: ${geminiRes.status}`);
-                
-                const geminiData = await geminiRes.json();
+                for (const model of modelsToTry) {
+                    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
+                    try {
+                        const geminiRes = await fetch(geminiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ 
+                                contents: [{ parts: [{ text: prompt }] }],
+                                generationConfig: { responseMimeType: "application/json" }
+                            })
+                        });
+
+                        if (geminiRes.ok) {
+                            geminiData = await geminiRes.json();
+                            break; 
+                        } else {
+                            console.warn(`Gemini model ${model} failed with status: ${geminiRes.status}`);
+                        }
+                    } catch(err) {
+                        console.warn(`Fetch error for ${model}:`, err);
+                    }
+                }
+
+                if (!geminiData) throw new Error(`Failed to reach Gemini API. Ensure your API key is correct and models are online.`);
                 
                 let rawText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text;
                 if (!rawText) throw new Error("Empty response from Gemini API");
