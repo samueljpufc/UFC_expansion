@@ -58,26 +58,31 @@
             <p class="text-xs text-slate-400 mt-1">B2B Playbook Automated</p>
         </div>
         
-        <nav class="flex-1 py-4">
+        <nav class="flex-1 py-4 overflow-y-auto">
             <ul class="space-y-1 px-3">
                 <li>
-                    <button onclick="nav('prospector')" id="nav-prospector" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium bg-blue-600 text-white transition-colors">
+                    <button onclick="window.nav('prospector')" id="nav-prospector" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium bg-blue-600 text-white transition-colors">
                         <i data-lucide="search" class="w-4 h-4"></i> Module 1: Prospector
                     </button>
                 </li>
                 <li>
-                    <button onclick="nav('scanner')" id="nav-scanner" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
-                        <i data-lucide="scan-line" class="w-4 h-4"></i> Module 2: Omni-Scanner
+                    <button onclick="window.nav('scanner-hunter')" id="nav-scanner-hunter" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                        <i data-lucide="scan-line" class="w-4 h-4 text-purple-400"></i> Module 2: Hunter Scanner
                     </button>
                 </li>
                 <li>
-                    <button onclick="nav('sniper')" id="nav-sniper" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
-                        <i data-lucide="target" class="w-4 h-4"></i> Module 3: Sniper
+                    <button onclick="window.nav('scanner-apollo')" id="nav-scanner-apollo" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                        <i data-lucide="rocket" class="w-4 h-4 text-orange-400"></i> Module 3: Apollo Scanner
                     </button>
                 </li>
                 <li>
-                    <button onclick="nav('crm')" id="nav-crm" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
-                        <i data-lucide="database" class="w-4 h-4"></i> Module 4: Internal CRM
+                    <button onclick="window.nav('sniper')" id="nav-sniper" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                        <i data-lucide="target" class="w-4 h-4 text-red-400"></i> Module 4: Sniper
+                    </button>
+                </li>
+                <li>
+                    <button onclick="window.nav('crm')" id="nav-crm" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                        <i data-lucide="database" class="w-4 h-4 text-emerald-400"></i> Module 5: Internal CRM
                     </button>
                 </li>
             </ul>
@@ -123,10 +128,28 @@
                         <i data-lucide="search" class="text-blue-500 w-6 h-6"></i>
                     </div>
                     
-                    <form id="prospector-form" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <form id="prospector-form" class="grid grid-cols-1 md:grid-cols-5 gap-4">
                         <div class="md:col-span-2">
                             <label class="block text-xs font-medium text-gray-700 mb-1">Search Keyword</label>
                             <input type="text" id="p-keyword" placeholder="e.g., Freight forwarders Dubai to Ghana" class="w-full rounded-lg border-gray-300 border px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" required value="Freight forwarders Dubai to Ghana">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Target Location</label>
+                            <div class="flex gap-2">
+                                <select id="p-location" class="flex-1 rounded-lg border-gray-300 border px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                                    <option value='{"loc":"United Arab Emirates","dom":"google.ae","gl":"ae"}'>UAE</option>
+                                    <option value='{"loc":"United States","dom":"google.com","gl":"us"}'>United States</option>
+                                    <option value='{"loc":"United Kingdom","dom":"google.co.uk","gl":"uk"}'>United Kingdom</option>
+                                    <option value='{"loc":"Saudi Arabia","dom":"google.com.sa","gl":"sa"}'>Saudi Arabia</option>
+                                    <option value='{"loc":"South Africa","dom":"google.co.za","gl":"za"}'>South Africa</option>
+                                    <option value='{"loc":"India","dom":"google.co.in","gl":"in"}'>India</option>
+                                    <option value='{"loc":"Ghana","dom":"google.com.gh","gl":"gh"}'>Ghana</option>
+                                    <option value='{"loc":"Uganda","dom":"google.co.ug","gl":"ug"}'>Uganda</option>
+                                </select>
+                                <button type="button" onclick="document.getElementById('location-modal').classList.remove('hidden')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg border border-gray-300 transition-colors shadow-sm" title="Add New Location">
+                                    <i data-lucide="plus" class="w-4 h-4"></i>
+                                </button>
+                            </div>
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-1">Industry</label>
@@ -152,14 +175,19 @@
 
                 <!-- Prospector Results -->
                 <div id="prospector-results-container" class="hidden">
-                    <div class="flex justify-between items-center mb-3">
+                    <div class="flex flex-col md:flex-row justify-between md:items-center mb-3 gap-3">
                         <h4 class="text-sm font-semibold text-gray-700 flex items-center gap-2">
                             <i data-lucide="list" class="w-4 h-4"></i> Top Extracted Domains
                         </h4>
-                        <!-- NEW: Batch Scan Button -->
-                        <button id="scan-all-btn" onclick="startBatchScan()" class="hidden bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors shadow-sm">
-                            <i data-lucide="zap" class="w-4 h-4"></i> Omni-Scan All Domains
-                        </button>
+                        <!-- Dual Batch Scan Buttons -->
+                        <div id="batch-scan-actions" class="hidden flex gap-2">
+                            <button onclick="window.startBatchScan('hunter')" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors shadow-sm">
+                                <i data-lucide="zap" class="w-4 h-4"></i> Batch Hunter Scan
+                            </button>
+                            <button onclick="window.startBatchScan('apollo')" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors shadow-sm">
+                                <i data-lucide="rocket" class="w-4 h-4"></i> Batch Apollo Scan
+                            </button>
+                        </div>
                     </div>
                     
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -168,7 +196,6 @@
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company Name</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Website Domain</th>
-                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="prospector-table-body" class="bg-white divide-y divide-gray-200">
@@ -184,59 +211,83 @@
                 </div>
             </section>
 
-            <!-- MODULE 2: OMNI SCANNER -->
-            <section id="module-scanner" class="module-section">
+            <!-- MODULE 2: HUNTER SCANNER -->
+            <section id="module-scanner-hunter" class="module-section">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
                     <div class="flex items-start justify-between mb-4">
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-800">Omni-Scanner (No AI)</h3>
-                            <p class="text-sm text-gray-500">Cascades through 6 Hunter.io endpoints to fully enrich a company and find targets.</p>
+                            <h3 class="text-lg font-semibold text-gray-800">Hunter.io Scanner</h3>
+                            <p class="text-sm text-gray-500">Cascades through Hunter.io endpoints to enrich a company and find targets.</p>
                         </div>
                         <i data-lucide="zap" class="text-purple-500 w-6 h-6"></i>
                     </div>
                     
-                    <form id="scanner-form" class="space-y-4">
+                    <form id="scanner-hunter-form" class="space-y-4">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-medium text-gray-700 mb-1">Company Domain <span class="text-red-500">*</span></label>
-                                <input type="text" id="s-domain" placeholder="e.g., stripe.com" class="w-full rounded-lg border-gray-300 border px-4 py-2 text-sm focus:ring-2 focus:ring-purple-500 outline-none" required>
+                                <input type="text" id="sh-domain" placeholder="e.g., stripe.com" class="w-full rounded-lg border-gray-300 border px-4 py-2 text-sm focus:ring-2 focus:ring-purple-500 outline-none" required>
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-700 mb-1">Target Name (Optional)</label>
-                                <input type="text" id="s-person" placeholder="e.g., Patrick Collison" class="w-full rounded-lg border-gray-300 border px-4 py-2 text-sm focus:ring-2 focus:ring-purple-500 outline-none">
+                                <input type="text" id="sh-person" placeholder="e.g., Patrick Collison" class="w-full rounded-lg border-gray-300 border px-4 py-2 text-sm focus:ring-2 focus:ring-purple-500 outline-none">
                             </div>
                         </div>
                         <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg text-sm transition-all flex justify-center items-center gap-2 shadow-md">
-                            <i data-lucide="zap" class="w-4 h-4 text-purple-200"></i> Execute API Sequence
+                            <i data-lucide="zap" class="w-4 h-4 text-purple-200"></i> Execute Hunter Sequence
                         </button>
-                        
-                        <div class="mt-4 pt-4 border-t border-slate-100">
-                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center mb-2">Hunter.io APIs Triggered:</p>
-                            <div class="flex flex-wrap justify-center gap-2 text-xs text-slate-500 font-mono">
-                                <span class="bg-slate-100 px-2 py-1 rounded">domain-search</span>
-                                <span class="bg-slate-100 px-2 py-1 rounded">companies/find</span>
-                                <span class="bg-slate-100 px-2 py-1 rounded">email-finder</span>
-                                <span class="bg-slate-100 px-2 py-1 rounded">email-verifier</span>
-                                <span class="bg-slate-100 px-2 py-1 rounded">people/find</span>
-                                <span class="bg-slate-100 px-2 py-1 rounded">combined/find</span>
-                            </div>
-                        </div>
                     </form>
                 </div>
 
-                <div id="scanner-loading" class="hidden py-16 flex flex-col items-center justify-center text-gray-500">
+                <div id="scanner-hunter-loading" class="hidden py-16 flex flex-col items-center justify-center text-gray-500">
                     <i data-lucide="loader-2" class="w-10 h-10 animate-spin text-purple-500 mb-4"></i>
-                    <h3 class="text-lg font-bold text-slate-700">Executing API Sequence...</h3>
-                    <p class="text-sm text-slate-500 mt-2">Resolving domain → Extracting directory → Verifying leads</p>
+                    <h3 class="text-lg font-bold text-slate-700">Executing Hunter API Sequence...</h3>
+                    <p class="text-sm text-slate-500 mt-2" id="scanner-hunter-loading-text">Resolving domain → Extracting directory → Verifying leads</p>
                 </div>
 
-                <!-- Dynamic Omni-Search Results injected here -->
-                <div id="scanner-results-container" class="hidden space-y-6">
-                    <!-- Populated by JS renderOmniSearchResults() -->
-                </div>
+                <!-- Dynamic Hunter Results injected here -->
+                <div id="scanner-hunter-results-container" class="hidden space-y-6"></div>
             </section>
 
-            <!-- MODULE 3: SNIPER -->
+            <!-- MODULE 3: APOLLO SCANNER -->
+            <section id="module-scanner-apollo" class="module-section">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800">Apollo Scanner</h3>
+                            <p class="text-sm text-gray-500">Utilizes Apollo.io REST APIs to enrich organizations and extract people data.</p>
+                        </div>
+                        <i data-lucide="rocket" class="text-orange-500 w-6 h-6"></i>
+                    </div>
+                    
+                    <form id="scanner-apollo-form" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Company Domain <span class="text-red-500">*</span></label>
+                                <input type="text" id="sa-domain" placeholder="e.g., stripe.com" class="w-full rounded-lg border-gray-300 border px-4 py-2 text-sm focus:ring-2 focus:ring-orange-500 outline-none" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Target Name (Optional)</label>
+                                <input type="text" id="sa-person" placeholder="e.g., Patrick Collison" class="w-full rounded-lg border-gray-300 border px-4 py-2 text-sm focus:ring-2 focus:ring-orange-500 outline-none">
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg text-sm transition-all flex justify-center items-center gap-2 shadow-md">
+                            <i data-lucide="rocket" class="w-4 h-4 text-orange-200"></i> Execute Apollo Sequence
+                        </button>
+                    </form>
+                </div>
+
+                <div id="scanner-apollo-loading" class="hidden py-16 flex flex-col items-center justify-center text-gray-500">
+                    <i data-lucide="loader-2" class="w-10 h-10 animate-spin text-orange-500 mb-4"></i>
+                    <h3 class="text-lg font-bold text-slate-700">Executing Apollo API Sequence...</h3>
+                    <p class="text-sm text-slate-500 mt-2" id="scanner-apollo-loading-text">Fetching organization data → Scraping contacts</p>
+                </div>
+
+                <!-- Dynamic Apollo Results injected here -->
+                <div id="scanner-apollo-results-container" class="hidden space-y-6"></div>
+            </section>
+
+            <!-- MODULE 4: SNIPER -->
             <section id="module-sniper" class="module-section">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 max-w-2xl mx-auto">
                     <div class="flex items-start justify-between mb-6">
@@ -273,7 +324,7 @@
 
                     <div id="sniper-loading" class="hidden py-8 flex flex-col items-center justify-center text-gray-500">
                         <i data-lucide="loader-2" class="w-8 h-8 animate-spin text-red-500 mb-2"></i>
-                        <p class="text-sm">Verifying MX records and testing patterns...</p>
+                        <p class="text-sm">Verifying records...</p>
                     </div>
 
                     <div id="sniper-result" class="hidden mt-6 border-t border-gray-100 pt-6">
@@ -288,7 +339,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button onclick="saveSniperLead()" class="bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2">
+                            <button onclick="window.saveSniperLead()" class="bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2">
                                 <i data-lucide="plus" class="w-4 h-4"></i> Save to CRM
                             </button>
                         </div>
@@ -296,7 +347,7 @@
                 </div>
             </section>
 
-            <!-- MODULE 4: CRM -->
+            <!-- MODULE 5: CRM -->
             <section id="module-crm" class="module-section">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-[calc(100vh-140px)]">
                     <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
@@ -304,7 +355,7 @@
                             <h3 class="text-lg font-semibold text-gray-800">Internal Lead CRM</h3>
                             <p class="text-sm text-gray-500">Track your daily outreach targets.</p>
                         </div>
-                        <button onclick="exportCSV()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 shadow-sm">
+                        <button onclick="window.exportCSV()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 shadow-sm">
                             <i data-lucide="download" class="w-4 h-4"></i> Export to CSV
                         </button>
                     </div>
@@ -329,8 +380,8 @@
                         <div id="crm-empty" class="hidden flex-col items-center justify-center py-20 text-gray-400">
                             <i data-lucide="inbox" class="w-12 h-12 mb-4 text-gray-300"></i>
                             <p class="text-lg font-medium text-gray-600">No leads saved yet</p>
-                            <p class="text-sm mt-1">Use the Scanner or Sniper to add leads to your CRM.</p>
-                            <button onclick="nav('prospector')" class="mt-4 text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center gap-1">
+                            <p class="text-sm mt-1">Use the Scanners or Sniper to add leads to your CRM.</p>
+                            <button onclick="window.nav('prospector')" class="mt-4 text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center gap-1">
                                 Go to Prospector <i data-lucide="arrow-right" class="w-4 h-4"></i>
                             </button>
                         </div>
@@ -353,7 +404,35 @@
             </div>
             <div class="p-5 border-t border-slate-100 flex justify-end gap-3 bg-slate-50">
                 <button onclick="document.getElementById('industry-modal').classList.add('hidden')" class="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-200 rounded-xl transition-colors">Cancel</button>
-                <button onclick="saveIndustry()" class="px-4 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors">Save Industry</button>
+                <button onclick="window.saveIndustry()" class="px-4 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors">Save Industry</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Location Modal -->
+    <div id="location-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl border border-slate-200 flex flex-col overflow-hidden transform transition-all">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <h3 class="text-lg font-bold text-slate-800">Add Target Location</h3>
+                <button onclick="document.getElementById('location-modal').classList.add('hidden')" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div class="p-5 space-y-3">
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">Country Name</label>
+                    <input type="text" id="new-loc-name" placeholder="e.g., Germany" class="w-full rounded-lg border-gray-300 border px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">Google Domain</label>
+                    <input type="text" id="new-loc-dom" placeholder="e.g., google.de" class="w-full rounded-lg border-gray-300 border px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">Country Code (gl)</label>
+                    <input type="text" id="new-loc-gl" placeholder="e.g., de" class="w-full rounded-lg border-gray-300 border px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+            </div>
+            <div class="p-5 border-t border-slate-100 flex justify-end gap-3 bg-slate-50">
+                <button onclick="document.getElementById('location-modal').classList.add('hidden')" class="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-200 rounded-xl transition-colors">Cancel</button>
+                <button onclick="window.saveLocation()" class="px-4 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors">Save Location</button>
             </div>
         </div>
     </div>
@@ -364,14 +443,15 @@
         <span id="toast-message">Lead Saved Successfully!</span>
     </div>
 
-    <script>
+    <script type="module">
         // Initialize Icons
         lucide.createIcons();
 
         // --- API CONFIGURATION ---
         const SERP_API_KEY = "d919ca8c74f62188cf84d217f7c4cdd6fa524381479cb811488b5bfc793de0b0";
         const HUNTER_API_KEY = "e685cbc545b6fa27ebc05c07d03a60be5d1d3470";
-        const GEMINI_API_KEY = ""; // Important: Provided automatically at runtime
+        const APOLLO_API_KEY = "dZVThk5UmYgf9kY7vJx8yg";
+        const GEMINI_API_KEY = "AIzaSyAV5UaAcODeAWhszzVTrgGR_Pv4hEjGG_U"; // Replaced with your key for Vercel deployment
 
         // Multi-layered proxy fetching to guarantee success despite rate limits or timeouts.
         async function fetchWithProxy(url) {
@@ -407,6 +487,7 @@
         // --- FIREBASE CONFIGURATION & INIT ---
         let db, collection, addDoc, onSnapshot, doc, deleteDoc, updateDoc;
         let isFirebaseReady = false;
+        let listenersAttached = false;
 
         async function initFirebase() {
             try {
@@ -435,39 +516,21 @@
                 deleteDoc = firestore.deleteDoc; 
                 updateDoc = firestore.updateDoc;
 
-                // Sign in anonymously to bypass restrictive rules
-                await authModule.signInAnonymously(auth);
-                isFirebaseReady = true;
-
-                // Listen to Industries
-                const defaultIndustries = ["Freight & Logistics", "General Trading", "Manufacturing", "Software"];
-                onSnapshot(collection(db, 'industries'), (snapshot) => {
-                    const select = document.getElementById('p-industry');
-                    const currentVal = select.value;
-                    let loaded = [];
-                    snapshot.forEach(d => loaded.push(d.data().name));
-                    
-                    const allIndustries = [...new Set([...defaultIndustries, ...loaded])];
-                    
-                    select.innerHTML = '';
-                    allIndustries.forEach(ind => {
-                        const opt = document.createElement('option');
-                        opt.value = ind;
-                        opt.innerText = ind;
-                        select.appendChild(opt);
-                    });
-                    
-                    if (allIndustries.includes(currentVal)) select.value = currentVal;
-                });
-
-                // Listen to CRM Leads
-                onSnapshot(collection(db, 'leads'), (snapshot) => {
-                    crmData = [];
-                    snapshot.forEach(d => {
-                        crmData.push({ id: d.id, ...d.data() });
-                    });
-                    renderCRM();
-                    updateKPI();
+                // Wait for auth to be fully initialized before attaching snapshot listeners
+                authModule.onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        isFirebaseReady = true;
+                        if (!listenersAttached) {
+                            setupFirebaseListeners();
+                            listenersAttached = true;
+                        }
+                    } else {
+                        // If not authenticated, attempt anonymous sign-in
+                        authModule.signInAnonymously(auth).catch(err => {
+                            console.error("Firebase Anon Auth Error:", err);
+                            showToast("Firebase Auth failed. Running locally.", true);
+                        });
+                    }
                 });
 
             } catch (error) {
@@ -475,23 +538,153 @@
                 showToast("Firebase connection failed. Running locally.", true);
             }
         }
+        
+        function addIndustryToDropdown(name) {
+            const select = document.getElementById('p-industry');
+            if (!Array.from(select.options).some(o => o.value === name)) {
+                const opt = document.createElement('option');
+                opt.value = name;
+                opt.innerText = name;
+                select.appendChild(opt);
+            }
+            select.value = name;
+        }
+
+        function addLocationToDropdown(loc) {
+            const select = document.getElementById('p-location');
+            const valStr = JSON.stringify({ loc: loc.loc, dom: loc.dom, gl: loc.gl });
+            if (!Array.from(select.options).some(o => o.value === valStr)) {
+                const opt = document.createElement('option');
+                opt.value = valStr;
+                opt.innerText = loc.name;
+                select.appendChild(opt);
+            }
+            select.value = valStr;
+        }
+
+        function setupFirebaseListeners() {
+            // Listen to Industries
+            const defaultIndustries = ["Freight & Logistics", "General Trading", "Manufacturing", "Software"];
+            onSnapshot(collection(db, 'industries'), (snapshot) => {
+                const select = document.getElementById('p-industry');
+                const currentVal = select.value;
+                let loaded = [];
+                snapshot.forEach(d => loaded.push(d.data().name));
+                
+                const allIndustries = [...new Set([...defaultIndustries, ...loaded])];
+                
+                select.innerHTML = '';
+                allIndustries.forEach(ind => addIndustryToDropdown(ind));
+                
+                if (allIndustries.includes(currentVal)) select.value = currentVal;
+            }, (error) => {
+                console.error("Firestore Rules check failed. Industries blocked:", error);
+            });
+
+            // Listen to Locations
+            const defaultLocations = [
+                { loc: "United Arab Emirates", dom: "google.ae", gl: "ae", name: "UAE" },
+                { loc: "United States", dom: "google.com", gl: "us", name: "United States" },
+                { loc: "United Kingdom", dom: "google.co.uk", gl: "uk", name: "United Kingdom" },
+                { loc: "Saudi Arabia", dom: "google.com.sa", gl: "sa", name: "Saudi Arabia" },
+                { loc: "South Africa", dom: "google.co.za", gl: "za", name: "South Africa" },
+                { loc: "India", dom: "google.co.in", gl: "in", name: "India" },
+                { loc: "Ghana", dom: "google.com.gh", gl: "gh", name: "Ghana" },
+                { loc: "Uganda", dom: "google.co.ug", gl: "ug", name: "Uganda" }
+            ];
+            onSnapshot(collection(db, 'locations'), (snapshot) => {
+                const select = document.getElementById('p-location');
+                const currentVal = select.value;
+                let loaded = [];
+                snapshot.forEach(d => loaded.push(d.data()));
+
+                const allLocsMap = new Map();
+                defaultLocations.forEach(l => allLocsMap.set(l.loc, l));
+                loaded.forEach(l => allLocsMap.set(l.loc, l));
+
+                select.innerHTML = '';
+                allLocsMap.forEach((val, key) => {
+                    const opt = document.createElement('option');
+                    opt.value = JSON.stringify({ loc: val.loc, dom: val.dom, gl: val.gl });
+                    opt.innerText = val.name || val.loc;
+                    select.appendChild(opt);
+                });
+
+                if(currentVal && Array.from(select.options).some(o => o.value === currentVal)) {
+                    select.value = currentVal;
+                }
+            }, (error) => {
+                console.error("Firestore Rules check failed. Locations blocked:", error);
+            });
+
+            // Listen to CRM Leads
+            onSnapshot(collection(db, 'leads'), (snapshot) => {
+                crmData = [];
+                snapshot.forEach(d => {
+                    crmData.push({ id: d.id, ...d.data() });
+                });
+                renderCRM();
+                updateKPI();
+            }, (error) => {
+                console.error("Firestore Rules check failed. Leads blocked:", error);
+            });
+        }
+        
         initFirebase();
 
-        async function saveIndustry() {
+        window.saveIndustry = async function() {
             const val = document.getElementById('new-industry-val').value.trim();
             if(!val) return;
-            if(!isFirebaseReady) { showToast("Firebase not ready", true); return; }
             
-            try {
-                await addDoc(collection(db, 'industries'), { name: val });
-                document.getElementById('new-industry-val').value = '';
-                document.getElementById('industry-modal').classList.add('hidden');
-                showToast("Industry saved to cloud!");
-            } catch(e) {
-                console.error(e);
-                showToast("Error saving industry", true);
+            if(isFirebaseReady) {
+                try {
+                    await addDoc(collection(db, 'industries'), { name: val });
+                    showToast("Industry saved to cloud!");
+                } catch(e) {
+                    console.error(e);
+                    addIndustryToDropdown(val);
+                    showToast("Saved locally (Cloud sync blocked by rules)");
+                }
+            } else {
+                addIndustryToDropdown(val);
+                showToast("Saved locally");
             }
-        }
+            
+            document.getElementById('new-industry-val').value = '';
+            document.getElementById('industry-modal').classList.add('hidden');
+        };
+
+        window.saveLocation = async function() {
+            const locName = document.getElementById('new-loc-name').value.trim();
+            const locDom = document.getElementById('new-loc-dom').value.trim();
+            const locGl = document.getElementById('new-loc-gl').value.trim();
+
+            if(!locName || !locDom || !locGl) {
+                showToast("Please fill all location fields", true);
+                return;
+            }
+
+            const newLoc = { loc: locName, name: locName, dom: locDom, gl: locGl };
+
+            if(isFirebaseReady) {
+                try {
+                    await addDoc(collection(db, 'locations'), newLoc);
+                    showToast("Location saved to cloud!");
+                } catch(e) {
+                    console.error("Firebase save failed:", e);
+                    addLocationToDropdown(newLoc);
+                    showToast("Saved locally (Cloud sync blocked by rules)");
+                }
+            } else {
+                addLocationToDropdown(newLoc);
+                showToast("Saved location locally!");
+            }
+            
+            document.getElementById('new-loc-name').value = '';
+            document.getElementById('new-loc-dom').value = '';
+            document.getElementById('new-loc-gl').value = '';
+            document.getElementById('location-modal').classList.add('hidden');
+        };
 
         async function addLeadToCRM(lead) {
             if(isFirebaseReady) {
@@ -500,7 +693,11 @@
                     showToast(`Saved ${lead.name} to Cloud CRM`);
                 } catch(e) {
                     console.error(e);
-                    showToast("Error saving lead to cloud", true);
+                    lead.id = generateId();
+                    crmData.push(lead);
+                    showToast(`Saved ${lead.name} locally (Cloud block)`);
+                    renderCRM(); 
+                    updateKPI();
                 }
             } else {
                 lead.id = generateId();
@@ -514,12 +711,13 @@
         // --- NAVIGATION LOGIC ---
         const titles = {
             'prospector': 'Module 1: The Prospector',
-            'scanner': 'Module 2: Omni-Scanner',
-            'sniper': 'Module 3: The Sniper',
-            'crm': 'Internal CRM Dashboard'
+            'scanner-hunter': 'Module 2: Hunter Scanner',
+            'scanner-apollo': 'Module 3: Apollo Scanner',
+            'sniper': 'Module 4: The Sniper',
+            'crm': 'Module 5: Internal CRM Dashboard'
         };
 
-        function nav(moduleName) {
+        window.nav = function(moduleName) {
             document.querySelectorAll('.module-section').forEach(el => el.classList.remove('active'));
             document.getElementById(`module-${moduleName}`).classList.add('active');
             
@@ -532,7 +730,7 @@
             document.getElementById('page-title').innerText = titles[moduleName];
 
             if(moduleName === 'crm') renderCRM();
-        }
+        };
 
         // --- UTILS ---
         function showToast(message, isError = false) {
@@ -571,15 +769,23 @@
             return encodeURIComponent(JSON.stringify(obj));
         }
 
+        // Handle decoded saving from inline clicks from any scanner
+        window.saveLeadFromScanner = function(encodedLeadStr) {
+            const lead = JSON.parse(decodeURIComponent(encodedLeadStr));
+            lead.date = formatDate(new Date());
+            addLeadToCRM(lead);
+        };
+
         // --- MODULE 1: PROSPECTOR LOGIC ---
         document.getElementById('prospector-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const baseKeyword = document.getElementById('p-keyword').value;
             const industry = document.getElementById('p-industry').value;
+            const locData = JSON.parse(document.getElementById('p-location').value);
             
             document.getElementById('prospector-results-container').classList.remove('hidden');
             document.getElementById('prospector-loading').classList.remove('hidden');
-            document.getElementById('scan-all-btn').classList.add('hidden'); // Hide batch button initially
+            document.getElementById('batch-scan-actions').classList.add('hidden'); // Hide batch buttons initially
             
             const tbody = document.getElementById('prospector-table-body');
             tbody.innerHTML = '';
@@ -587,9 +793,10 @@
             document.getElementById('prospector-loading-text').innerText = "Gemini AI is brainstorming 10 search variations...";
 
             try {
-                const prompt = `You are an expert B2B lead generation researcher. I want to find companies in the "${industry}" industry. My base search is: "${baseKeyword}". Rephrase this into 10 different highly effective Google search queries to find business websites. Return ONLY a valid JSON array of 10 strings, with no markdown formatting or extra text.`;
+                const prompt = `You are an expert B2B lead generation researcher. I want to find companies in the "${industry}" industry targeting or located in "${locData.loc}". My base search is: "${baseKeyword}". Rephrase this into 10 different highly effective Google search queries to find business websites. Return ONLY a valid JSON array of 10 strings, with no markdown formatting or extra text.`;
 
-                const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${GEMINI_API_KEY}`;
+                // Safe model reference updated for global deployment
+                const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
                 
                 const geminiRes = await fetch(geminiUrl, {
                     method: 'POST',
@@ -616,7 +823,7 @@
                     document.getElementById('prospector-loading-text').innerHTML = `Searching variation ${i + 1} of 10:<br><span class="text-blue-600 font-bold">"${query}"</span>`;
 
                     try {
-                        const searchUrl = `https://serpapi.com/search.json?engine=google&q=${encodeURIComponent(query)}&api_key=${SERP_API_KEY}`;
+                        const searchUrl = `https://serpapi.com/search.json?engine=google&q=${encodeURIComponent(query)}&location=${encodeURIComponent(locData.loc)}&google_domain=${locData.dom}&gl=${locData.gl}&hl=en&api_key=${SERP_API_KEY}`;
                         const data = await fetchWithProxy(searchUrl);
                         
                         if (data.organic_results && data.organic_results.length > 0) {
@@ -635,23 +842,18 @@
 
                             tbody.insertAdjacentHTML('beforeend', `
                                 <tr class="bg-gray-100 border-t-4 border-gray-200">
-                                    <td colspan="3" class="px-6 py-2 text-xs font-semibold text-gray-700">Search Phrase: <span class="italic text-blue-600">"${query}"</span></td>
+                                    <td colspan="2" class="px-6 py-2 text-xs font-semibold text-gray-700">Search Phrase: <span class="italic text-blue-600">"${query}"</span></td>
                                 </tr>
                             `);
 
                             if (uniqueCompanies.length === 0) {
-                                tbody.insertAdjacentHTML('beforeend', `<tr><td colspan="3" class="px-6 py-2 text-xs text-gray-400 text-center italic">No new unique B2B domains found for this phrase.</td></tr>`);
+                                tbody.insertAdjacentHTML('beforeend', `<tr><td colspan="2" class="px-6 py-2 text-xs text-gray-400 text-center italic">No new unique B2B domains found for this phrase.</td></tr>`);
                             } else {
                                 uniqueCompanies.slice(0, 5).forEach(company => {
                                     const row = `
                                         <tr class="hover:bg-blue-50 transition-colors">
                                             <td class="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">${company.name}</td>
                                             <td class="px-6 py-3 whitespace-nowrap text-sm text-blue-600 font-mono hover:underline cursor-pointer"><a href="https://${company.domain}" target="_blank">${company.domain}</a></td>
-                                            <td class="px-6 py-3 whitespace-nowrap text-right text-sm font-medium">
-                                                <button onclick="sendToScanner('${company.domain}')" class="text-purple-600 hover:text-purple-900 bg-purple-50 hover:bg-purple-100 px-3 py-1.5 rounded-md transition-colors flex items-center gap-1 ml-auto">
-                                                    <i data-lucide="scan" class="w-4 h-4"></i> Scan Domain
-                                                </button>
-                                            </td>
                                         </tr>
                                     `;
                                     tbody.insertAdjacentHTML('beforeend', row);
@@ -666,9 +868,9 @@
 
                 document.getElementById('prospector-loading').classList.add('hidden');
                 
-                // Show Batch Scan button if domains were found
+                // Show Batch Scan buttons if domains were found
                 if(discoveredDomains.length > 0) {
-                    document.getElementById('scan-all-btn').classList.remove('hidden');
+                    document.getElementById('batch-scan-actions').classList.remove('hidden');
                 }
                 showToast("AI Exploration Complete!");
 
@@ -679,136 +881,53 @@
             }
         });
 
-        function sendToScanner(domain) {
-            document.getElementById('s-domain').value = domain;
-            nav('scanner');
-        }
-
-        // --- MODULE 2: OMNI-SCANNER LOGIC (Cascading APIs WITHOUT AI) ---
-        
-        // Handles manual single-domain form submission
-        document.getElementById('scanner-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const domainRaw = document.getElementById('s-domain').value.trim();
-            const personName = document.getElementById('s-person').value.trim();
-            const domain = cleanDomain(domainRaw);
-            
-            // Clear previous results and show loading
-            document.getElementById('scanner-results-container').innerHTML = '';
-            await performOmniScan(domain, personName, false);
-        });
-
-        // Triggered by the "Omni-Scan All Domains" button in Module 1
-        async function startBatchScan() {
+        // --- BATCH SCAN LOGIC ---
+        window.startBatchScan = async function(type) {
             if (discoveredDomains.length === 0) {
                 showToast("No domains discovered yet.", true);
                 return;
             }
             
-            nav('scanner');
-            const container = document.getElementById('scanner-results-container');
+            const moduleName = type === 'hunter' ? 'scanner-hunter' : 'scanner-apollo';
+            window.nav(moduleName);
+            
+            const containerId = `scanner-${type}-results-container`;
+            const loadingId = `scanner-${type}-loading`;
+            const textId = `scanner-${type}-loading-text`;
+
+            const container = document.getElementById(containerId);
             container.innerHTML = ''; // Clear container for the batch
             container.classList.remove('hidden');
 
-            const loadingEl = document.getElementById('scanner-loading');
+            const loadingEl = document.getElementById(loadingId);
             loadingEl.classList.remove('hidden');
 
             for (let i = 0; i < discoveredDomains.length; i++) {
                 const domain = discoveredDomains[i];
                 
-                // Update Loading UI for current domain
-                loadingEl.innerHTML = `
-                    <i data-lucide="loader-2" class="w-10 h-10 animate-spin text-purple-500 mb-4"></i>
-                    <h3 class="text-lg font-bold text-slate-700">Batch Scanning ${i + 1} of ${discoveredDomains.length}...</h3>
-                    <p class="text-sm text-slate-500 mt-2 font-mono">Targeting: ${domain}</p>
-                `;
+                // Update Loading UI
+                document.getElementById(textId).innerHTML = `Batch Scanning ${i + 1} of ${discoveredDomains.length}...<br><span class="font-mono text-xs">${domain}</span>`;
                 lucide.createIcons();
 
-                // Append the scan result
-                await performOmniScan(domain, '', true);
+                if (type === 'hunter') {
+                    await performHunterScan(domain, '', true, containerId);
+                } else {
+                    await performApolloScan(domain, '', true, containerId);
+                }
 
-                // Rate Limiting Delay: 2 seconds between domains to respect Hunter.io limits
+                // Rate Limiting Delay
                 if (i < discoveredDomains.length - 1) {
                     await new Promise(r => setTimeout(r, 2000));
                 }
             }
 
             loadingEl.classList.add('hidden');
-            showToast("Batch Omni-Scan Complete!");
-        }
+            showToast(`Batch ${type.charAt(0).toUpperCase() + type.slice(1)} Scan Complete!`);
+        };
 
-        // Core extraction logic, decoupled so it can be used manually or in a loop
-        async function performOmniScan(domain, personName = '', append = false) {
-            const container = document.getElementById('scanner-results-container');
-            const loadingEl = document.getElementById('scanner-loading');
-            
-            if(!append) {
-                container.classList.add('hidden');
-                loadingEl.classList.remove('hidden');
-            }
-
-            try {
-                let firstName = '';
-                let lastName = '';
-                if(personName) {
-                    const parts = personName.split(' ');
-                    firstName = parts[0];
-                    lastName = parts.slice(1).join(' ');
-                }
-
-                // 1. & 2. Domain Search & Company Find
-                const domData = await fetchWithProxy(`https://api.hunter.io/v2/domain-search?domain=${encodeURIComponent(domain)}&api_key=${HUNTER_API_KEY}`);
-                const compData = await fetchWithProxy(`https://api.hunter.io/v2/companies/find?domain=${encodeURIComponent(domain)}&api_key=${HUNTER_API_KEY}`).catch(() => null);
-
-                // 3. Email Finder (if name provided)
-                let emailFinderData = null;
-                let targetEmail = null;
-                if (firstName && lastName) {
-                    const fData = await fetchWithProxy(`https://api.hunter.io/v2/email-finder?domain=${encodeURIComponent(domain)}&first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&api_key=${HUNTER_API_KEY}`).catch(() => null);
-                    if (fData && fData.data && fData.data.email) {
-                        emailFinderData = fData.data;
-                        targetEmail = fData.data.email;
-                    }
-                }
-
-                // 4. Fallback decision maker
-                const emails = domData?.data?.emails || [];
-                if (!targetEmail && emails.length > 0) {
-                    const decisionMaker = emails.find(e => /ceo|cto|founder|director|president|vp/i.test(e.position || ''));
-                    targetEmail = decisionMaker ? decisionMaker.value : emails[0].value;
-                }
-
-                // 5. Verification & Person & Combined Enrich
-                let verifierData = null, personData = null, combinedData = null;
-                if (targetEmail) {
-                    verifierData = await fetchWithProxy(`https://api.hunter.io/v2/email-verifier?email=${encodeURIComponent(targetEmail)}&api_key=${HUNTER_API_KEY}`).catch(() => null);
-                    personData = await fetchWithProxy(`https://api.hunter.io/v2/people/find?email=${encodeURIComponent(targetEmail)}&api_key=${HUNTER_API_KEY}`).catch(() => null);
-                    combinedData = await fetchWithProxy(`https://api.hunter.io/v2/combined/find?email=${encodeURIComponent(targetEmail)}&api_key=${HUNTER_API_KEY}`).catch(() => null);
-                }
-
-                const companyInfo = compData?.data || domData?.data || null;
-
-                renderOmniSearchResults({
-                    domain,
-                    company: companyInfo,
-                    emails,
-                    targetEmail,
-                    verifier: verifierData?.data || null,
-                    person: personData?.data || null,
-                    combined: combinedData?.data || null,
-                    searchedPerson: personName
-                }, append);
-
-            } catch (error) {
-                console.error(`Omni-Scanner Error for ${domain}:`, error);
-                if(!append) showToast("Failed to fetch data. Check console.", true);
-            } finally {
-                if(!append) loadingEl.classList.add('hidden');
-            }
-        }
-
-        function renderOmniSearchResults(results, append = false) {
-            const container = document.getElementById('scanner-results-container');
+        // --- COMMON RENDER FUNCTION ---
+        function renderScannerResults(results, append, containerId) {
+            const container = document.getElementById(containerId);
             if(!append) container.innerHTML = '';
             container.classList.remove('hidden');
 
@@ -816,7 +935,6 @@
             const compIndustry = results.company?.industry || 'General Industry';
             const compDesc = results.company?.description || 'No description available.';
 
-            // Wrap in a distinctly separated section for batch scrolling
             let contentWrapper = `<div class="bg-slate-50 border border-slate-200 p-6 rounded-3xl shadow-sm relative mb-12">`;
 
             // 1. Company Enrichment Card
@@ -895,7 +1013,7 @@
                                 <p class="text-emerald-600 font-bold text-sm mb-1">${targetRole}</p>
                                 <p class="text-slate-500 font-mono text-sm bg-slate-100 inline-block px-2 py-0.5 rounded border border-slate-200 break-all">${results.targetEmail}</p>
                             </div>
-                            <button onclick="saveLeadFromOmni('${leadObjEncoded}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-sm font-bold flex items-center justify-center gap-2 shadow-sm transition-colors w-full sm:w-auto mt-4 sm:mt-0">
+                            <button onclick="window.saveLeadFromScanner('${leadObjEncoded}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-sm font-bold flex items-center justify-center gap-2 shadow-sm transition-colors w-full sm:w-auto mt-4 sm:mt-0">
                                 <i data-lucide="plus" class="w-4 h-4"></i> Save Lead
                             </button>
                         </div>
@@ -955,7 +1073,7 @@
                                 </div>
                                 <div class="flex items-center gap-3 shrink-0">
                                     <span class="text-xs font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded border border-slate-100">${email.confidence}%</span>
-                                    <button onclick="saveLeadFromOmni('${leadObjEncoded}')" class="text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 p-1.5 rounded transition-colors" title="Save to CRM">
+                                    <button onclick="window.saveLeadFromScanner('${leadObjEncoded}')" class="text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 p-1.5 rounded transition-colors" title="Save to CRM">
                                         <i data-lucide="plus" class="w-4 h-4"></i>
                                     </button>
                                 </div>
@@ -976,26 +1094,218 @@
                  contentWrapper += `
                     <div class="bg-white border border-dashed border-slate-300 rounded-3xl p-10 flex flex-col items-center justify-center text-center mt-6">
                         <i data-lucide="user-x" class="w-10 h-10 text-slate-400 mb-3"></i>
-                        <h4 class="text-lg font-bold text-slate-800">No public directory data found</h4>
-                        <p class="text-sm text-slate-500 mt-1">Hunter.io couldn't find any public employee records for this domain.</p>
+                        <h4 class="text-lg font-bold text-slate-800">No directory data found</h4>
+                        <p class="text-sm text-slate-500 mt-1">The provider couldn't find any public employee records for <strong>${results.domain}</strong>.</p>
                     </div>
                 `;
             }
 
-            contentWrapper += `</div>`; // Close the master content wrapper
+            contentWrapper += `</div>`; 
             container.insertAdjacentHTML('beforeend', contentWrapper);
-            
             lucide.createIcons();
         }
 
-        // Handle decoded saving from inline clicks
-        window.saveLeadFromOmni = function(encodedLeadStr) {
-            const lead = JSON.parse(decodeURIComponent(encodedLeadStr));
-            lead.date = formatDate(new Date());
-            addLeadToCRM(lead);
-        };
+        // --- MODULE 2: HUNTER SCANNER LOGIC ---
+        document.getElementById('scanner-hunter-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const domainRaw = document.getElementById('sh-domain').value.trim();
+            const personName = document.getElementById('sh-person').value.trim();
+            const domain = cleanDomain(domainRaw);
+            await performHunterScan(domain, personName, false, 'scanner-hunter-results-container');
+        });
 
-        // --- MODULE 3: SNIPER LOGIC (HUNTER.IO EMAIL FINDER) ---
+        async function performHunterScan(domain, personName = '', append = false, containerId) {
+            const loadingEl = document.getElementById('scanner-hunter-loading');
+            if(!append) {
+                document.getElementById(containerId).classList.add('hidden');
+                loadingEl.classList.remove('hidden');
+            }
+
+            try {
+                let firstName = '';
+                let lastName = '';
+                if(personName) {
+                    const parts = personName.split(' ');
+                    firstName = parts[0];
+                    lastName = parts.slice(1).join(' ');
+                }
+
+                // 1. Domain Search
+                const domRes = await fetch(`https://api.hunter.io/v2/domain-search?domain=${encodeURIComponent(domain)}&api_key=${HUNTER_API_KEY}`);
+                if (!domRes.ok || domRes.status === 429) {
+                    if (!append) showToast("Hunter API Rate Limit Exceeded or failed.", true);
+                    return;
+                }
+                const domData = await domRes.json();
+
+                // 2. Company Find
+                const compRes = await fetch(`https://api.hunter.io/v2/companies/find?domain=${encodeURIComponent(domain)}&api_key=${HUNTER_API_KEY}`);
+                const compData = compRes.ok ? await compRes.json() : { data: null };
+
+                // 3. Email Finder
+                let targetEmail = null;
+                if (firstName && lastName) {
+                    const fRes = await fetch(`https://api.hunter.io/v2/email-finder?domain=${encodeURIComponent(domain)}&first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&api_key=${HUNTER_API_KEY}`);
+                    if (fRes.ok) {
+                        const fData = await fRes.json();
+                        if (fData.data?.email) targetEmail = fData.data.email;
+                    }
+                }
+
+                // 4. Fallback decision maker
+                const emails = domData?.data?.emails || [];
+                if (!targetEmail && emails.length > 0) {
+                    const decisionMaker = emails.find(e => /ceo|cto|founder|director|president|vp/i.test(e.position || ''));
+                    targetEmail = decisionMaker ? decisionMaker.value : emails[0].value;
+                }
+
+                // 5. Verification & Person & Combined Enrich
+                let verifierData = null, personData = null, combinedData = null;
+                if (targetEmail) {
+                    const vRes = await fetch(`https://api.hunter.io/v2/email-verifier?email=${encodeURIComponent(targetEmail)}&api_key=${HUNTER_API_KEY}`);
+                    if (vRes.ok) verifierData = (await vRes.json()).data;
+
+                    const pRes = await fetch(`https://api.hunter.io/v2/people/find?email=${encodeURIComponent(targetEmail)}&api_key=${HUNTER_API_KEY}`);
+                    if (pRes.ok) personData = (await pRes.json()).data;
+
+                    const cRes = await fetch(`https://api.hunter.io/v2/combined/find?email=${encodeURIComponent(targetEmail)}&api_key=${HUNTER_API_KEY}`);
+                    if (cRes.ok) combinedData = (await cRes.json()).data;
+                }
+
+                renderScannerResults({
+                    domain,
+                    company: compData?.data || domData?.data || null,
+                    emails,
+                    targetEmail,
+                    verifier: verifierData?.data || null,
+                    person: personData?.data || null,
+                    combined: combinedData?.data || null,
+                    searchedPerson: personName
+                }, append, containerId);
+
+            } catch (error) {
+                console.error(`Hunter Scanner Error for ${domain}:`, error);
+                if(!append) showToast("Failed to fetch Hunter data. Check console.", true);
+            } finally {
+                if(!append) loadingEl.classList.add('hidden');
+            }
+        }
+
+        // --- MODULE 3: APOLLO SCANNER LOGIC ---
+        document.getElementById('scanner-apollo-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const domainRaw = document.getElementById('sa-domain').value.trim();
+            const personName = document.getElementById('sa-person').value.trim();
+            const domain = cleanDomain(domainRaw);
+            
+            await performApolloScan(domain, personName, false, 'scanner-apollo-results-container');
+        });
+
+        // Directly fetch from Apollo without node.js backend
+        async function performApolloScan(domain, personName = '', append = false, containerId) {
+            const loadingEl = document.getElementById('scanner-apollo-loading');
+
+            if(!append) {
+                document.getElementById(containerId).classList.add('hidden');
+                loadingEl.classList.remove('hidden');
+            }
+
+            try {
+                // 1. Organization Search
+                let companyInfo = null;
+                try {
+                    const compRes = await fetch(`https://api.apollo.io/api/v1/mixed_companies/search`, {
+                        method: 'POST',
+                        headers: {
+                            'Cache-Control': 'no-cache',
+                            'Content-Type': 'application/json',
+                            'accept': 'application/json',
+                            'x-api-key': APOLLO_API_KEY
+                        },
+                        body: JSON.stringify({ q_organization_domains_list: [domain] })
+                    });
+                    if (compRes.ok) {
+                        const compData = await compRes.json();
+                        const org = compData.organizations?.[0];
+                        if (org) {
+                            companyInfo = {
+                                name: org.name,
+                                industry: org.industry,
+                                description: org.short_description || org.seo_description || "",
+                                country: org.country || "Unknown",
+                                linkedin: org.linkedin_url || ""
+                            };
+                        }
+                    }
+                } catch(e) { console.warn("Apollo company search failed", e); }
+
+                // 2. People Search
+                let emails = [];
+                try {
+                    const pplRes = await fetch(`https://api.apollo.io/api/v1/mixed_people/search`, {
+                        method: 'POST',
+                        headers: {
+                            'Cache-Control': 'no-cache',
+                            'Content-Type': 'application/json',
+                            'accept': 'application/json',
+                            'x-api-key': APOLLO_API_KEY
+                        },
+                        body: JSON.stringify({ 
+                            q_organization_domains: domain, 
+                            per_page: 15,
+                            q_keywords: personName ? personName : undefined
+                        })
+                    });
+
+                    if (pplRes.ok) {
+                        const pplData = await pplRes.json();
+                        const people = pplData.people || pplData.contacts || [];
+
+                        emails = people.filter(p => p.email || p.email_status).map(p => ({
+                            value: p.email || "Email hidden (Requires unlock)",
+                            first_name: p.first_name,
+                            last_name: p.last_name,
+                            position: p.title,
+                            confidence: p.email_status === 'verified' ? 95 : 75,
+                            linkedin: p.linkedin_url
+                        }));
+                    }
+                } catch(e) { console.warn("Apollo people search failed", e); }
+
+                let targetEmail = null;
+                let personData = null;
+
+                // Try to find the actual searched person or a decision maker
+                if (emails.length > 0) {
+                    const validEmails = emails.filter(e => e.value !== "Email hidden (Requires unlock)");
+                    if(validEmails.length > 0) {
+                        const dm = validEmails.find(e => /ceo|cto|founder|director|president|vp/i.test(e.position || ''));
+                        const target = dm || validEmails[0];
+                        targetEmail = target.value;
+                        personData = target;
+                    }
+                }
+
+                renderScannerResults({
+                    domain,
+                    company: companyInfo || { name: domain },
+                    emails: emails,
+                    targetEmail: targetEmail,
+                    verifier: targetEmail ? { status: 'valid', score: 95 } : null,
+                    person: personData,
+                    combined: personData,
+                    searchedPerson: personName
+                }, append, containerId);
+
+            } catch (error) {
+                console.error(`Apollo Scanner Error for ${domain}:`, error);
+                if(!append) showToast("Apollo API failed to fetch. Check console.", true);
+            } finally {
+                if(!append) loadingEl.classList.add('hidden');
+            }
+        }
+
+        // --- MODULE 4: SNIPER LOGIC (HUNTER.IO EMAIL FINDER) ---
         document.getElementById('sniper-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const first = document.getElementById('sn-first').value.trim();
@@ -1007,8 +1317,15 @@
 
             try {
                 const hunterUrl = `https://api.hunter.io/v2/email-finder?domain=${encodeURIComponent(domain)}&first_name=${encodeURIComponent(first)}&last_name=${encodeURIComponent(last)}&api_key=${HUNTER_API_KEY}`;
-                const data = await fetchWithProxy(hunterUrl);
+                const res = await fetch(hunterUrl);
                 
+                if (!res.ok || res.status === 429) {
+                    showToast("Hunter API limit reached or failed.", true);
+                    document.getElementById('sniper-loading').classList.add('hidden');
+                    return;
+                }
+
+                const data = await res.json();
                 document.getElementById('sniper-loading').classList.add('hidden');
                 
                 if (data.data && data.data.email) {
@@ -1042,16 +1359,16 @@
             }
         });
 
-        function saveSniperLead() {
+        window.saveSniperLead = function() {
             if(currentSniperLead) {
                 addLeadToCRM(currentSniperLead);
                 document.getElementById('sniper-result').classList.add('hidden');
                 document.getElementById('sniper-form').reset();
                 currentSniperLead = null;
             }
-        }
+        };
 
-        // --- MODULE 4: CRM LOGIC ---
+        // --- MODULE 5: CRM LOGIC ---
         function renderCRM() {
             const tbody = document.getElementById('crm-table-body');
             const emptyState = document.getElementById('crm-empty');
@@ -1083,14 +1400,14 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${lead.country}</td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <select onchange="updateLeadStatus('${lead.id}', this.value)" class="text-xs bg-gray-100 border-none rounded py-1 px-2 text-gray-700 outline-none cursor-pointer focus:ring-2 focus:ring-blue-500">
+                            <select onchange="window.updateLeadStatus('${lead.id}', this.value)" class="text-xs bg-gray-100 border-none rounded py-1 px-2 text-gray-700 outline-none cursor-pointer focus:ring-2 focus:ring-blue-500">
                                 <option value="New" ${lead.status === 'New' ? 'selected' : ''}>New</option>
                                 <option value="Contacted" ${lead.status === 'Contacted' ? 'selected' : ''}>Contacted</option>
                                 <option value="Meeting Set" ${lead.status === 'Meeting Set' ? 'selected' : ''}>Meeting Set</option>
                             </select>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <button onclick="deleteLead('${lead.id}')" class="text-red-400 hover:text-red-600 p-1 rounded hover:bg-red-50 transition-colors">
+                            <button onclick="window.deleteLead('${lead.id}')" class="text-red-400 hover:text-red-600 p-1 rounded hover:bg-red-50 transition-colors">
                                 <i data-lucide="trash-2" class="w-4 h-4"></i>
                             </button>
                         </td>
@@ -1101,7 +1418,7 @@
             lucide.createIcons();
         }
 
-        async function updateLeadStatus(id, newStatus) {
+        window.updateLeadStatus = async function(id, newStatus) {
             if(isFirebaseReady) {
                 try {
                     await updateDoc(doc(db, 'leads', id), { status: newStatus });
@@ -1112,9 +1429,9 @@
                 const idx = crmData.findIndex(l => l.id === id);
                 if (idx > -1) crmData[idx].status = newStatus;
             }
-        }
+        };
 
-        async function deleteLead(id) {
+        window.deleteLead = async function(id) {
             if(isFirebaseReady) {
                 try {
                     await deleteDoc(doc(db, 'leads', id));
@@ -1126,9 +1443,9 @@
                 renderCRM();
                 updateKPI();
             }
-        }
+        };
 
-        function exportCSV() {
+        window.exportCSV = function() {
             if (crmData.length === 0) {
                 showToast("No leads to export. Add some leads first!", true);
                 return;
@@ -1152,7 +1469,7 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-        }
+        };
 
         // Initialize empty state
         updateKPI();
