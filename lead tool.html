@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2B LeadGen Playbook</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .module-section { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .module-section.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #10B981;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 12px;
+            position: fixed;
+            z-index: 50;
+            right: 30px;
+            bottom: 30px;
+            font-size: 14px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .toast.show {
+            visibility: visible;
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 h-screen flex overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-slate-900 text-white flex flex-col h-full shadow-xl z-20">
+        <div class="p-6 border-b border-slate-700">
+            <h1 class="text-xl font-bold flex items-center gap-2">
+                <i data-lucide="radar" class="text-blue-400"></i>
+                LeadGen Pro
+            </h1>
+            <p class="text-xs text-slate-400 mt-1">B2B Playbook Automated</p>
+        </div>
+        
+        <nav class="flex-1 py-4">
+            <ul class="space-y-1 px-3">
+                <li>
+                    <button onclick="nav('prospector')" id="nav-prospector" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium bg-blue-600 text-white transition-colors">
+                        <i data-lucide="search" class="w-4 h-4"></i> Module 1: Prospector
+                    </button>
+                </li>
+                <li>
+                    <button onclick="nav('scanner')" id="nav-scanner" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                        <i data-lucide="scan-line" class="w-4 h-4"></i> Module 2: Omni-Scanner
+                    </button>
+                </li>
+                <li>
+                    <button onclick="nav('sniper')" id="nav-sniper" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                        <i data-lucide="target" class="w-4 h-4"></i> Module 3: Sniper
+                    </button>
+                </li>
+                <li>
+                    <button onclick="nav('crm')" id="nav-crm" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                        <i data-lucide="database" class="w-4 h-4"></i> Module 4: Internal CRM
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        
+        <div class="p-4 border-t border-slate-700">
+            <div class="bg-slate-800 rounded-lg p-3 text-xs text-slate-300">
+                <div class="flex justify-between items-center mb-2">
+                    <span>Daily KPI</span>
+                    <span class="font-bold text-white"><span id="kpi-count">0</span>/5</span>
+                </div>
+                <div class="w-full bg-slate-700 rounded-full h-1.5">
+                    <div id="kpi-bar" class="bg-blue-500 h-1.5 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 h-full overflow-y-auto bg-gray-50 relative">
+        <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
+            <div class="px-8 py-4 flex justify-between items-center">
+                <h2 id="page-title" class="text-xl font-semibold text-gray-800">The Prospector</h2>
+                <div class="flex items-center gap-3">
+                    <span class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                        Live APIs Active
+                    </span>
+                </div>
+            </div>
+        </header>
+
+        <div class="p-8 max-w-6xl mx-auto">
+            
+            <!-- MODULE 1: PROSPECTOR -->
+            <section id="module-prospector" class="module-section active">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800">Discover Companies</h3>
+                            <p class="text-sm text-gray-500">Automate Google search and extract domains via SerpApi simulation.</p>
+                        </div>
+                        <i data-lucide="search" class="text-blue-500 w-6 h-6"></i>
+                    </div>
+                    
+                    <form id="prospector-form" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Search Keyword</label>
+                            <input type="text" id="p-keyword" placeholder="e.g., Freight forwarders Dubai to Ghana" class="w-full rounded-lg border-gray-300 border px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" required value="Freight forwarders Dubai to Ghana">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Industry</label>
+                            <div class="flex gap-2">
+                                <select id="p-industry" class="flex-1 rounded-lg border-gray-300 border px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                                    <option>Freight & Logistics</option>
+                                    <option>General Trading</option>
+                                    <option>Manufacturing</option>
+                                    <option>Software</option>
+                                </select>
+                                <button type="button" onclick="document.getElementById('industry-modal').classList.remove('hidden')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg border border-gray-300 transition-colors shadow-sm" title="Add New Industry">
+                                    <i data-lucide="plus" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex items-end">
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg text-sm transition-colors flex justify-center items-center gap-2">
+                                <i data-lucide="globe" class="w-4 h-4"></i> Search Web
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Prospector Results -->
+                <div id="prospector-results-container" class="hidden">
+                    <div class="flex justify-between items-center mb-3">
+                        <h4 class="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                            <i data-lucide="list" class="w-4 h-4"></i> Top Extracted Domains
+                        </h4>
+                        <!-- NEW: Batch Scan Button -->
+                        <button id="scan-all-btn" onclick="startBatchScan()" class="hidden bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors shadow-sm">
+                            <i data-lucide="zap" class="w-4 h-4"></i> Omni-Scan All Domains
+                        </button>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Website Domain</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="prospector-table-body" class="bg-white divide-y divide-gray-200">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div id="prospector-loading" class="hidden py-12 flex flex-col items-center justify-center text-gray-500">
+                    <i data-lucide="loader-2" class="w-8 h-8 animate-spin text-blue-500 mb-4"></i>
+                    <p class="text-sm font-medium text-gray-700 text-center" id="prospector-loading-text">Generating AI search variations...</p>
+                </div>
+            </section>
+
+            <!-- MODULE 2: OMNI SCANNER -->
+            <section id="module-scanner" class="module-section">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800">Omni-Scanner (No AI)</h3>
+                            <p class="text-sm text-gray-500">Cascades through 6 Hunter.io endpoints to fully enrich a company and find targets.</p>
+                        </div>
+                        <i data-lucide="zap" class="text-purple-500 w-6 h-6"></i>
+                    </div>
+                    
+                    <form id="scanner-form" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Company Domain <span class="text-red-500">*</span></label>
+                                <input type="text" id="s-domain" placeholder="e.g., stripe.com" class="w-full rounded-lg border-gray-300 border px-4 py-2 text-sm focus:ring-2 focus:ring-purple-500 outline-none" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Target Name (Optional)</label>
+                                <input type="text" id="s-person" placeholder="e.g., Patrick Collison" class="w-full rounded-lg border-gray-300 border px-4 py-2 text-sm focus:ring-2 focus:ring-purple-500 outline-none">
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg text-sm transition-all flex justify-center items-center gap-2 shadow-md">
+                            <i data-lucide="zap" class="w-4 h-4 text-purple-200"></i> Execute API Sequence
+                        </button>
+                        
+                        <div class="mt-4 pt-4 border-t border-slate-100">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center mb-2">Hunter.io APIs Triggered:</p>
+                            <div class="flex flex-wrap justify-center gap-2 text-xs text-slate-500 font-mono">
+                                <span class="bg-slate-100 px-2 py-1 rounded">domain-search</span>
+                                <span class="bg-slate-100 px-2 py-1 rounded">companies/find</span>
+                                <span class="bg-slate-100 px-2 py-1 rounded">email-finder</span>
+                                <span class="bg-slate-100 px-2 py-1 rounded">email-verifier</span>
+                                <span class="bg-slate-100 px-2 py-1 rounded">people/find</span>
+                                <span class="bg-slate-100 px-2 py-1 rounded">combined/find</span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="scanner-loading" class="hidden py-16 flex flex-col items-center justify-center text-gray-500">
+                    <i data-lucide="loader-2" class="w-10 h-10 animate-spin text-purple-500 mb-4"></i>
+                    <h3 class="text-lg font-bold text-slate-700">Executing API Sequence...</h3>
+                    <p class="text-sm text-slate-500 mt-2">Resolving domain → Extracting directory → Verifying leads</p>
+                </div>
+
+                <!-- Dynamic Omni-Search Results injected here -->
+                <div id="scanner-results-container" class="hidden space-y-6">
+                    <!-- Populated by JS renderOmniSearchResults() -->
+                </div>
+            </section>
+
+            <!-- MODULE 3: SNIPER -->
+            <section id="module-sniper" class="module-section">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 max-w-2xl mx-auto">
+                    <div class="flex items-start justify-between mb-6">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800">The Sniper</h3>
+                            <p class="text-sm text-gray-500">Find a specific person's email from their name and company.</p>
+                        </div>
+                        <div class="bg-red-100 p-2 rounded-lg">
+                            <i data-lucide="target" class="text-red-500 w-6 h-6"></i>
+                        </div>
+                    </div>
+                    
+                    <form id="sniper-form" class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">First Name</label>
+                                <input type="text" id="sn-first" placeholder="e.g., David" class="w-full rounded-lg border-gray-300 border px-4 py-2 text-sm focus:ring-2 focus:ring-red-500 outline-none" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Last Name</label>
+                                <input type="text" id="sn-last" placeholder="e.g., Mensah" class="w-full rounded-lg border-gray-300 border px-4 py-2 text-sm focus:ring-2 focus:ring-red-500 outline-none" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Company Domain</label>
+                            <input type="text" id="sn-domain" placeholder="e.g., blueskytrading.ae" class="w-full rounded-lg border-gray-300 border px-4 py-2 text-sm focus:ring-2 focus:ring-red-500 outline-none" required>
+                        </div>
+                        <div class="pt-2">
+                            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg text-sm transition-colors flex justify-center items-center gap-2">
+                                <i data-lucide="crosshair" class="w-4 h-4"></i> Find Verified Email
+                            </button>
+                        </div>
+                    </form>
+
+                    <div id="sniper-loading" class="hidden py-8 flex flex-col items-center justify-center text-gray-500">
+                        <i data-lucide="loader-2" class="w-8 h-8 animate-spin text-red-500 mb-2"></i>
+                        <p class="text-sm">Verifying MX records and testing patterns...</p>
+                    </div>
+
+                    <div id="sniper-result" class="hidden mt-6 border-t border-gray-100 pt-6">
+                        <div class="bg-gray-50 rounded-lg p-4 border border-gray-200 flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold text-lg" id="sn-initial">D</div>
+                                <div>
+                                    <p class="text-sm font-semibold text-gray-800" id="sn-res-name">David Mensah</p>
+                                    <div class="flex items-center gap-2">
+                                        <p class="text-sm text-gray-600 font-mono" id="sn-res-email">david.m@blueskytrading.ae</p>
+                                        <i data-lucide="check-circle-2" class="w-4 h-4 text-green-500"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <button onclick="saveSniperLead()" class="bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2">
+                                <i data-lucide="plus" class="w-4 h-4"></i> Save to CRM
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MODULE 4: CRM -->
+            <section id="module-crm" class="module-section">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-[calc(100vh-140px)]">
+                    <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800">Internal Lead CRM</h3>
+                            <p class="text-sm text-gray-500">Track your daily outreach targets.</p>
+                        </div>
+                        <button onclick="exportCSV()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 shadow-sm">
+                            <i data-lucide="download" class="w-4 h-4"></i> Export to CSV
+                        </button>
+                    </div>
+                    
+                    <div class="flex-1 overflow-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-white sticky top-0 z-10 shadow-sm">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Added</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name & Role</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company / Email</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="crm-table-body" class="bg-white divide-y divide-gray-100">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                        
+                        <div id="crm-empty" class="hidden flex-col items-center justify-center py-20 text-gray-400">
+                            <i data-lucide="inbox" class="w-12 h-12 mb-4 text-gray-300"></i>
+                            <p class="text-lg font-medium text-gray-600">No leads saved yet</p>
+                            <p class="text-sm mt-1">Use the Scanner or Sniper to add leads to your CRM.</p>
+                            <button onclick="nav('prospector')" class="mt-4 text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center gap-1">
+                                Go to Prospector <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Add Industry Modal -->
+    <div id="industry-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl border border-slate-200 flex flex-col overflow-hidden transform transition-all">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <h3 class="text-lg font-bold text-slate-800">Add New Industry</h3>
+                <button onclick="document.getElementById('industry-modal').classList.add('hidden')" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div class="p-5">
+                <input type="text" id="new-industry-val" placeholder="e.g., Real Estate, Healthcare..." class="w-full rounded-lg border-gray-300 border px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+            <div class="p-5 border-t border-slate-100 flex justify-end gap-3 bg-slate-50">
+                <button onclick="document.getElementById('industry-modal').classList.add('hidden')" class="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-200 rounded-xl transition-colors">Cancel</button>
+                <button onclick="saveIndustry()" class="px-4 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors">Save Industry</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast flex items-center gap-2 justify-center shadow-lg">
+        <i data-lucide="check-circle" class="w-5 h-5"></i>
+        <span id="toast-message">Lead Saved Successfully!</span>
+    </div>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // --- API CONFIGURATION ---
+        const SERP_API_KEY = "d919ca8c74f62188cf84d217f7c4cdd6fa524381479cb811488b5bfc793de0b0";
+        const HUNTER_API_KEY = "e685cbc545b6fa27ebc05c07d03a60be5d1d3470";
+        const GEMINI_API_KEY = ""; // Important: Provided automatically at runtime
+
+        // Multi-layered proxy fetching to guarantee success despite rate limits or timeouts.
+        async function fetchWithProxy(url) {
+            try {
+                const proxy1 = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`;
+                const res1 = await fetch(proxy1);
+                if (res1.ok) return await res1.json();
+            } catch (e) { console.warn("Proxy 1 failed"); }
+
+            try {
+                const proxy2 = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+                const res2 = await fetch(proxy2);
+                if (res2.ok) {
+                    const data = await res2.json();
+                    return JSON.parse(data.contents);
+                }
+            } catch (e) { console.warn("Proxy 2 failed"); }
+
+            try {
+                const proxy3 = `https://corsproxy.io/?${encodeURIComponent(url)}`;
+                const res3 = await fetch(proxy3);
+                if (res3.ok) return await res3.json();
+            } catch (e) { console.warn("Proxy 3 failed"); }
+
+            throw new Error("Network error: All CORS proxies failed.");
+        }
+
+        // --- STATE MANAGEMENT ---
+        let crmData = [];
+        let currentSniperLead = null;
+        let discoveredDomains = []; // Keep track of all domains found in Module 1 for batch scanning
+
+        // --- FIREBASE CONFIGURATION & INIT ---
+        let db, collection, addDoc, onSnapshot, doc, deleteDoc, updateDoc;
+        let isFirebaseReady = false;
+
+        async function initFirebase() {
+            try {
+                const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
+                const firestore = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
+                const authModule = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js");
+
+                const firebaseConfig = {
+                    apiKey: "AIzaSyB2-Yey5l_xIPBwfSRX3xK7M2ELjzeJcUw",
+                    authDomain: "product-vault.firebaseapp.com",
+                    projectId: "product-vault",
+                    storageBucket: "product-vault.firebasestorage.app",
+                    messagingSenderId: "146284168538",
+                    appId: "1:146284168538:web:bfdaa52140932fa70d5f63",
+                    measurementId: "G-KD52NJ7K0J"
+                };
+
+                const app = initializeApp(firebaseConfig);
+                db = firestore.getFirestore(app);
+                const auth = authModule.getAuth(app);
+                
+                collection = firestore.collection; 
+                addDoc = firestore.addDoc; 
+                onSnapshot = firestore.onSnapshot; 
+                doc = firestore.doc; 
+                deleteDoc = firestore.deleteDoc; 
+                updateDoc = firestore.updateDoc;
+
+                // Sign in anonymously to bypass restrictive rules
+                await authModule.signInAnonymously(auth);
+                isFirebaseReady = true;
+
+                // Listen to Industries
+                const defaultIndustries = ["Freight & Logistics", "General Trading", "Manufacturing", "Software"];
+                onSnapshot(collection(db, 'industries'), (snapshot) => {
+                    const select = document.getElementById('p-industry');
+                    const currentVal = select.value;
+                    let loaded = [];
+                    snapshot.forEach(d => loaded.push(d.data().name));
+                    
+                    const allIndustries = [...new Set([...defaultIndustries, ...loaded])];
+                    
+                    select.innerHTML = '';
+                    allIndustries.forEach(ind => {
+                        const opt = document.createElement('option');
+                        opt.value = ind;
+                        opt.innerText = ind;
+                        select.appendChild(opt);
+                    });
+                    
+                    if (allIndustries.includes(currentVal)) select.value = currentVal;
+                });
+
+                // Listen to CRM Leads
+                onSnapshot(collection(db, 'leads'), (snapshot) => {
+                    crmData = [];
+                    snapshot.forEach(d => {
+                        crmData.push({ id: d.id, ...d.data() });
+                    });
+                    renderCRM();
+                    updateKPI();
+                });
+
+            } catch (error) {
+                console.error("Firebase Init Error:", error);
+                showToast("Firebase connection failed. Running locally.", true);
+            }
+        }
+        initFirebase();
+
+        async function saveIndustry() {
+            const val = document.getElementById('new-industry-val').value.trim();
+            if(!val) return;
+            if(!isFirebaseReady) { showToast("Firebase not ready", true); return; }
+            
+            try {
+                await addDoc(collection(db, 'industries'), { name: val });
+                document.getElementById('new-industry-val').value = '';
+                document.getElementById('industry-modal').classList.add('hidden');
+                showToast("Industry saved to cloud!");
+            } catch(e) {
+                console.error(e);
+                showToast("Error saving industry", true);
+            }
+        }
+
+        async function addLeadToCRM(lead) {
+            if(isFirebaseReady) {
+                try {
+                    await addDoc(collection(db, 'leads'), lead);
+                    showToast(`Saved ${lead.name} to Cloud CRM`);
+                } catch(e) {
+                    console.error(e);
+                    showToast("Error saving lead to cloud", true);
+                }
+            } else {
+                lead.id = generateId();
+                crmData.push(lead);
+                showToast(`Saved ${lead.name} locally`);
+                renderCRM(); 
+                updateKPI();
+            }
+        }
+
+        // --- NAVIGATION LOGIC ---
+        const titles = {
+            'prospector': 'Module 1: The Prospector',
+            'scanner': 'Module 2: Omni-Scanner',
+            'sniper': 'Module 3: The Sniper',
+            'crm': 'Internal CRM Dashboard'
+        };
+
+        function nav(moduleName) {
+            document.querySelectorAll('.module-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(`module-${moduleName}`).classList.add('active');
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = "nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors";
+            });
+            const activeBtn = document.getElementById(`nav-${moduleName}`);
+            activeBtn.className = "nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium bg-blue-600 text-white transition-colors";
+            
+            document.getElementById('page-title').innerText = titles[moduleName];
+
+            if(moduleName === 'crm') renderCRM();
+        }
+
+        // --- UTILS ---
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.style.backgroundColor = isError ? '#EF4444' : '#10B981';
+            document.getElementById('toast-message').innerText = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+            updateKPI();
+        }
+
+        function updateKPI() {
+            const count = crmData.length;
+            document.getElementById('kpi-count').innerText = count;
+            const percentage = Math.min((count / 5) * 100, 100);
+            document.getElementById('kpi-bar').style.width = `${percentage}%`;
+            if(percentage >= 100) {
+                document.getElementById('kpi-bar').classList.remove('bg-blue-500');
+                document.getElementById('kpi-bar').classList.add('bg-green-500');
+            }
+        }
+
+        function generateId() { return Math.random().toString(36).substr(2, 9); }
+        function formatDate(date) { return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(date); }
+
+        function cleanDomain(urlStr) {
+            try {
+                if (!urlStr.startsWith('http')) urlStr = 'https://' + urlStr;
+                const url = new URL(urlStr);
+                return url.hostname.replace(/^www\./, '');
+            } catch (e) { return urlStr; }
+        }
+
+        // Helper to escape object for passing into inline onclick
+        function escapeObjForHtml(obj) {
+            return encodeURIComponent(JSON.stringify(obj));
+        }
+
+        // --- MODULE 1: PROSPECTOR LOGIC ---
+        document.getElementById('prospector-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const baseKeyword = document.getElementById('p-keyword').value;
+            const industry = document.getElementById('p-industry').value;
+            
+            document.getElementById('prospector-results-container').classList.remove('hidden');
+            document.getElementById('prospector-loading').classList.remove('hidden');
+            document.getElementById('scan-all-btn').classList.add('hidden'); // Hide batch button initially
+            
+            const tbody = document.getElementById('prospector-table-body');
+            tbody.innerHTML = '';
+            discoveredDomains = []; // Reset global tracking array
+            document.getElementById('prospector-loading-text').innerText = "Gemini AI is brainstorming 10 search variations...";
+
+            try {
+                const prompt = `You are an expert B2B lead generation researcher. I want to find companies in the "${industry}" industry. My base search is: "${baseKeyword}". Rephrase this into 10 different highly effective Google search queries to find business websites. Return ONLY a valid JSON array of 10 strings, with no markdown formatting or extra text.`;
+
+                const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${GEMINI_API_KEY}`;
+                
+                const geminiRes = await fetch(geminiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: { responseMimeType: "application/json" }
+                    })
+                });
+
+                if (!geminiRes.ok) throw new Error(`Failed to reach Gemini API.`);
+                
+                const geminiData = await geminiRes.json();
+                let rawText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (!rawText) throw new Error("Empty response from Gemini API");
+                
+                rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
+                const searchQueries = JSON.parse(rawText);
+
+                const globalSeenDomains = new Set(); 
+
+                for (let i = 0; i < searchQueries.length; i++) {
+                    const query = searchQueries[i];
+                    document.getElementById('prospector-loading-text').innerHTML = `Searching variation ${i + 1} of 10:<br><span class="text-blue-600 font-bold">"${query}"</span>`;
+
+                    try {
+                        const searchUrl = `https://serpapi.com/search.json?engine=google&q=${encodeURIComponent(query)}&api_key=${SERP_API_KEY}`;
+                        const data = await fetchWithProxy(searchUrl);
+                        
+                        if (data.organic_results && data.organic_results.length > 0) {
+                            const uniqueCompanies = [];
+                            
+                            data.organic_results.forEach(result => {
+                                const domain = cleanDomain(result.link);
+                                if (!globalSeenDomains.has(domain)) {
+                                    globalSeenDomains.add(domain);
+                                    if (!domain.includes('linkedin.com') && !domain.includes('facebook.com') && !domain.includes('instagram.com') && !domain.includes('yellowpages')) {
+                                        uniqueCompanies.push({ name: result.title.split('-')[0].split('|')[0].trim(), domain: domain });
+                                        discoveredDomains.push(domain); // Track for Batch Scanner
+                                    }
+                                }
+                            });
+
+                            tbody.insertAdjacentHTML('beforeend', `
+                                <tr class="bg-gray-100 border-t-4 border-gray-200">
+                                    <td colspan="3" class="px-6 py-2 text-xs font-semibold text-gray-700">Search Phrase: <span class="italic text-blue-600">"${query}"</span></td>
+                                </tr>
+                            `);
+
+                            if (uniqueCompanies.length === 0) {
+                                tbody.insertAdjacentHTML('beforeend', `<tr><td colspan="3" class="px-6 py-2 text-xs text-gray-400 text-center italic">No new unique B2B domains found for this phrase.</td></tr>`);
+                            } else {
+                                uniqueCompanies.slice(0, 5).forEach(company => {
+                                    const row = `
+                                        <tr class="hover:bg-blue-50 transition-colors">
+                                            <td class="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">${company.name}</td>
+                                            <td class="px-6 py-3 whitespace-nowrap text-sm text-blue-600 font-mono hover:underline cursor-pointer"><a href="https://${company.domain}" target="_blank">${company.domain}</a></td>
+                                            <td class="px-6 py-3 whitespace-nowrap text-right text-sm font-medium">
+                                                <button onclick="sendToScanner('${company.domain}')" class="text-purple-600 hover:text-purple-900 bg-purple-50 hover:bg-purple-100 px-3 py-1.5 rounded-md transition-colors flex items-center gap-1 ml-auto">
+                                                    <i data-lucide="scan" class="w-4 h-4"></i> Scan Domain
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    `;
+                                    tbody.insertAdjacentHTML('beforeend', row);
+                                });
+                            }
+                            lucide.createIcons();
+                        }
+                    } catch (err) {
+                        console.error(`Error during SerpApi search for phrase: ${query}`, err);
+                    }
+                }
+
+                document.getElementById('prospector-loading').classList.add('hidden');
+                
+                // Show Batch Scan button if domains were found
+                if(discoveredDomains.length > 0) {
+                    document.getElementById('scan-all-btn').classList.remove('hidden');
+                }
+                showToast("AI Exploration Complete!");
+
+            } catch (error) {
+                document.getElementById('prospector-loading').classList.add('hidden');
+                showToast("Failed to run AI searches. Check console.", true);
+                console.error("Prospector AI Error:", error);
+            }
+        });
+
+        function sendToScanner(domain) {
+            document.getElementById('s-domain').value = domain;
+            nav('scanner');
+        }
+
+        // --- MODULE 2: OMNI-SCANNER LOGIC (Cascading APIs WITHOUT AI) ---
+        
+        // Handles manual single-domain form submission
+        document.getElementById('scanner-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const domainRaw = document.getElementById('s-domain').value.trim();
+            const personName = document.getElementById('s-person').value.trim();
+            const domain = cleanDomain(domainRaw);
+            
+            // Clear previous results and show loading
+            document.getElementById('scanner-results-container').innerHTML = '';
+            await performOmniScan(domain, personName, false);
+        });
+
+        // Triggered by the "Omni-Scan All Domains" button in Module 1
+        async function startBatchScan() {
+            if (discoveredDomains.length === 0) {
+                showToast("No domains discovered yet.", true);
+                return;
+            }
+            
+            nav('scanner');
+            const container = document.getElementById('scanner-results-container');
+            container.innerHTML = ''; // Clear container for the batch
+            container.classList.remove('hidden');
+
+            const loadingEl = document.getElementById('scanner-loading');
+            loadingEl.classList.remove('hidden');
+
+            for (let i = 0; i < discoveredDomains.length; i++) {
+                const domain = discoveredDomains[i];
+                
+                // Update Loading UI for current domain
+                loadingEl.innerHTML = `
+                    <i data-lucide="loader-2" class="w-10 h-10 animate-spin text-purple-500 mb-4"></i>
+                    <h3 class="text-lg font-bold text-slate-700">Batch Scanning ${i + 1} of ${discoveredDomains.length}...</h3>
+                    <p class="text-sm text-slate-500 mt-2 font-mono">Targeting: ${domain}</p>
+                `;
+                lucide.createIcons();
+
+                // Append the scan result
+                await performOmniScan(domain, '', true);
+
+                // Rate Limiting Delay: 2 seconds between domains to respect Hunter.io limits
+                if (i < discoveredDomains.length - 1) {
+                    await new Promise(r => setTimeout(r, 2000));
+                }
+            }
+
+            loadingEl.classList.add('hidden');
+            showToast("Batch Omni-Scan Complete!");
+        }
+
+        // Core extraction logic, decoupled so it can be used manually or in a loop
+        async function performOmniScan(domain, personName = '', append = false) {
+            const container = document.getElementById('scanner-results-container');
+            const loadingEl = document.getElementById('scanner-loading');
+            
+            if(!append) {
+                container.classList.add('hidden');
+                loadingEl.classList.remove('hidden');
+            }
+
+            try {
+                let firstName = '';
+                let lastName = '';
+                if(personName) {
+                    const parts = personName.split(' ');
+                    firstName = parts[0];
+                    lastName = parts.slice(1).join(' ');
+                }
+
+                // 1. & 2. Domain Search & Company Find
+                const domData = await fetchWithProxy(`https://api.hunter.io/v2/domain-search?domain=${encodeURIComponent(domain)}&api_key=${HUNTER_API_KEY}`);
+                const compData = await fetchWithProxy(`https://api.hunter.io/v2/companies/find?domain=${encodeURIComponent(domain)}&api_key=${HUNTER_API_KEY}`).catch(() => null);
+
+                // 3. Email Finder (if name provided)
+                let emailFinderData = null;
+                let targetEmail = null;
+                if (firstName && lastName) {
+                    const fData = await fetchWithProxy(`https://api.hunter.io/v2/email-finder?domain=${encodeURIComponent(domain)}&first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&api_key=${HUNTER_API_KEY}`).catch(() => null);
+                    if (fData && fData.data && fData.data.email) {
+                        emailFinderData = fData.data;
+                        targetEmail = fData.data.email;
+                    }
+                }
+
+                // 4. Fallback decision maker
+                const emails = domData?.data?.emails || [];
+                if (!targetEmail && emails.length > 0) {
+                    const decisionMaker = emails.find(e => /ceo|cto|founder|director|president|vp/i.test(e.position || ''));
+                    targetEmail = decisionMaker ? decisionMaker.value : emails[0].value;
+                }
+
+                // 5. Verification & Person & Combined Enrich
+                let verifierData = null, personData = null, combinedData = null;
+                if (targetEmail) {
+                    verifierData = await fetchWithProxy(`https://api.hunter.io/v2/email-verifier?email=${encodeURIComponent(targetEmail)}&api_key=${HUNTER_API_KEY}`).catch(() => null);
+                    personData = await fetchWithProxy(`https://api.hunter.io/v2/people/find?email=${encodeURIComponent(targetEmail)}&api_key=${HUNTER_API_KEY}`).catch(() => null);
+                    combinedData = await fetchWithProxy(`https://api.hunter.io/v2/combined/find?email=${encodeURIComponent(targetEmail)}&api_key=${HUNTER_API_KEY}`).catch(() => null);
+                }
+
+                const companyInfo = compData?.data || domData?.data || null;
+
+                renderOmniSearchResults({
+                    domain,
+                    company: companyInfo,
+                    emails,
+                    targetEmail,
+                    verifier: verifierData?.data || null,
+                    person: personData?.data || null,
+                    combined: combinedData?.data || null,
+                    searchedPerson: personName
+                }, append);
+
+            } catch (error) {
+                console.error(`Omni-Scanner Error for ${domain}:`, error);
+                if(!append) showToast("Failed to fetch data. Check console.", true);
+            } finally {
+                if(!append) loadingEl.classList.add('hidden');
+            }
+        }
+
+        function renderOmniSearchResults(results, append = false) {
+            const container = document.getElementById('scanner-results-container');
+            if(!append) container.innerHTML = '';
+            container.classList.remove('hidden');
+
+            const compName = results.company?.name || results.domain;
+            const compIndustry = results.company?.industry || 'General Industry';
+            const compDesc = results.company?.description || 'No description available.';
+
+            // Wrap in a distinctly separated section for batch scrolling
+            let contentWrapper = `<div class="bg-slate-50 border border-slate-200 p-6 rounded-3xl shadow-sm relative mb-12">`;
+
+            // 1. Company Enrichment Card
+            let companyHtml = `
+                <div class="bg-gradient-to-br from-slate-50 to-white border border-slate-200 p-6 rounded-3xl relative overflow-hidden">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 bg-white shadow-sm border border-slate-200 rounded-2xl flex items-center justify-center">
+                            <i data-lucide="building" class="w-6 h-6 text-purple-600"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-black text-slate-900">${compName}</h4>
+                            <p class="text-purple-600 font-medium text-sm">${compIndustry}</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="md:col-span-2 bg-white p-4 rounded-2xl border border-slate-200 text-sm text-slate-600 shadow-sm">
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">Company Description</span>
+                            ${compDesc}
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
+                            <i data-lucide="globe" class="w-5 h-5 text-slate-400 flex-shrink-0"></i>
+                            <div>
+                                <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Extracted Domain</span>
+                                <a href="https://${results.domain}" target="_blank" class="text-sm font-bold text-slate-800 hover:text-purple-600">${results.domain}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            contentWrapper += companyHtml;
+
+            // 2. Primary Target Card
+            if (results.targetEmail) {
+                const targetName = results.person?.first_name ? `${results.person.first_name} ${results.person.last_name || ''}` : (results.searchedPerson || "Key Contact");
+                const targetRole = results.person?.position || results.combined?.position || 'Leadership / Decision Maker';
+                const verifierStatus = results.verifier?.status || 'Unknown';
+                const verifierScore = results.verifier?.score || 0;
+                
+                const leadObjEncoded = escapeObjForHtml({
+                    id: generateId(),
+                    name: targetName,
+                    company: results.domain,
+                    email: results.targetEmail,
+                    role: targetRole,
+                    country: results.company?.country || 'Unknown',
+                    status: 'New'
+                });
+
+                let verifierHtml = '';
+                if (results.verifier) {
+                    const isValid = verifierStatus === 'valid';
+                    verifierHtml = `
+                        <div class="mt-4 p-3 rounded-xl flex items-center gap-3 ${isValid ? 'bg-green-50 border border-green-200' : 'bg-yellow-50 border border-yellow-200'}">
+                            <i data-lucide="${isValid ? 'check-circle' : 'alert-circle'}" class="w-5 h-5 ${isValid ? 'text-green-500' : 'text-yellow-500'}"></i>
+                            <div class="text-xs">
+                                <span class="font-bold text-slate-500 uppercase tracking-wider">Verification: </span>
+                                <span class="text-slate-700 capitalize">${verifierStatus} (Score: ${verifierScore}%)</span>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                let targetHtml = `
+                    <div class="bg-white border-2 border-emerald-100 p-6 rounded-3xl shadow-sm relative mt-6">
+                        <div class="absolute top-0 right-0 transform translate-x-2 -translate-y-2">
+                            <span class="bg-emerald-500 text-white text-[10px] font-bold px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                                <i data-lucide="zap" class="w-3 h-3"></i> Featured Target
+                            </span>
+                        </div>
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-2">
+                            <div class="w-12 h-12 bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-full flex items-center justify-center shrink-0">
+                                <i data-lucide="user" class="w-6 h-6"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-xl font-black text-slate-900">${targetName}</h4>
+                                <p class="text-emerald-600 font-bold text-sm mb-1">${targetRole}</p>
+                                <p class="text-slate-500 font-mono text-sm bg-slate-100 inline-block px-2 py-0.5 rounded border border-slate-200 break-all">${results.targetEmail}</p>
+                            </div>
+                            <button onclick="saveLeadFromOmni('${leadObjEncoded}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-sm font-bold flex items-center justify-center gap-2 shadow-sm transition-colors w-full sm:w-auto mt-4 sm:mt-0">
+                                <i data-lucide="plus" class="w-4 h-4"></i> Save Lead
+                            </button>
+                        </div>
+                        ${verifierHtml}
+                    </div>
+                `;
+                contentWrapper += targetHtml;
+            }
+
+            // 3. Employee Directory Grouping Logic
+            if (results.emails && results.emails.length > 0) {
+                const isDecisionMaker = (pos) => pos && /ceo|cto|cfo|coo|cmo|founder|president|vp|vice president|director|head|chief|manager|lead/i.test(pos);
+                const isPartner = (pos) => pos && /partner/i.test(pos);
+
+                const decisionMakers = results.emails.filter(e => isDecisionMaker(e.position));
+                const partners = results.emails.filter(e => isPartner(e.position));
+                const others = results.emails.filter(e => !isDecisionMaker(e.position) && !isPartner(e.position));
+
+                let directoryHtml = `
+                    <div class="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm mt-6">
+                        <div class="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
+                            <div class="p-2 bg-purple-50 rounded-xl border border-purple-100"><i data-lucide="users" class="w-5 h-5 text-purple-600"></i></div>
+                            <h3 class="text-lg font-black text-slate-900">Employee Directory</h3>
+                            <span class="ml-auto bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold">${results.emails.length} Found</span>
+                        </div>
+                        <div class="space-y-8">
+                `;
+
+                const buildGroupHtml = (title, items, icon, color) => {
+                    if (items.length === 0) return '';
+                    let groupHtml = `
+                        <div>
+                            <div class="flex items-center gap-2 mb-4 bg-${color}-50 p-2 rounded-xl border border-${color}-100">
+                                <i data-lucide="${icon}" class="w-4 h-4 text-${color}-600 ml-2"></i>
+                                <h4 class="text-sm font-bold text-slate-800">${title}</h4>
+                                <span class="bg-white text-${color}-700 px-2 rounded-full text-xs font-black shadow-sm">${items.length}</span>
+                            </div>
+                            <div class="space-y-2 pl-4 border-l-2 border-${color}-100 ml-4">
+                    `;
+                    items.forEach(email => {
+                        const name = (email.first_name || email.last_name) ? `${email.first_name || ''} ${email.last_name || ''}` : 'Unknown';
+                        const leadObjEncoded = escapeObjForHtml({
+                            id: generateId(),
+                            name: name,
+                            company: results.domain,
+                            email: email.value,
+                            role: email.position || 'Unknown',
+                            country: results.company?.country || 'Unknown',
+                            status: 'New'
+                        });
+
+                        groupHtml += `
+                            <div class="bg-white border border-slate-200 p-3 rounded-xl flex justify-between items-center hover:shadow-sm transition-all">
+                                <div>
+                                    <p class="font-bold text-sm text-slate-900 break-all">${email.value}</p>
+                                    <p class="text-xs text-slate-500 mt-0.5">${name} ${email.position ? ` <span class="text-slate-300">•</span> <span class="text-${color}-600 font-medium">${email.position}</span>` : ''}</p>
+                                </div>
+                                <div class="flex items-center gap-3 shrink-0">
+                                    <span class="text-xs font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded border border-slate-100">${email.confidence}%</span>
+                                    <button onclick="saveLeadFromOmni('${leadObjEncoded}')" class="text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 p-1.5 rounded transition-colors" title="Save to CRM">
+                                        <i data-lucide="plus" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    groupHtml += `</div></div>`;
+                    return groupHtml;
+                };
+
+                directoryHtml += buildGroupHtml('Decision Makers', decisionMakers, 'briefcase', 'purple');
+                directoryHtml += buildGroupHtml('Partners', partners, 'building', 'emerald');
+                directoryHtml += buildGroupHtml('Other Team Members', others, 'user', 'slate');
+                directoryHtml += `</div></div>`;
+                
+                contentWrapper += directoryHtml;
+            } else {
+                 contentWrapper += `
+                    <div class="bg-white border border-dashed border-slate-300 rounded-3xl p-10 flex flex-col items-center justify-center text-center mt-6">
+                        <i data-lucide="user-x" class="w-10 h-10 text-slate-400 mb-3"></i>
+                        <h4 class="text-lg font-bold text-slate-800">No public directory data found</h4>
+                        <p class="text-sm text-slate-500 mt-1">Hunter.io couldn't find any public employee records for this domain.</p>
+                    </div>
+                `;
+            }
+
+            contentWrapper += `</div>`; // Close the master content wrapper
+            container.insertAdjacentHTML('beforeend', contentWrapper);
+            
+            lucide.createIcons();
+        }
+
+        // Handle decoded saving from inline clicks
+        window.saveLeadFromOmni = function(encodedLeadStr) {
+            const lead = JSON.parse(decodeURIComponent(encodedLeadStr));
+            lead.date = formatDate(new Date());
+            addLeadToCRM(lead);
+        };
+
+        // --- MODULE 3: SNIPER LOGIC (HUNTER.IO EMAIL FINDER) ---
+        document.getElementById('sniper-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const first = document.getElementById('sn-first').value.trim();
+            const last = document.getElementById('sn-last').value.trim();
+            const domain = document.getElementById('sn-domain').value.trim();
+
+            document.getElementById('sniper-result').classList.add('hidden');
+            document.getElementById('sniper-loading').classList.remove('hidden');
+
+            try {
+                const hunterUrl = `https://api.hunter.io/v2/email-finder?domain=${encodeURIComponent(domain)}&first_name=${encodeURIComponent(first)}&last_name=${encodeURIComponent(last)}&api_key=${HUNTER_API_KEY}`;
+                const data = await fetchWithProxy(hunterUrl);
+                
+                document.getElementById('sniper-loading').classList.add('hidden');
+                
+                if (data.data && data.data.email) {
+                    const emailFormat = data.data.email;
+                    const fullName = `${first} ${last}`;
+                    
+                    document.getElementById('sn-initial').innerText = first.charAt(0).toUpperCase();
+                    document.getElementById('sn-res-name').innerText = fullName;
+                    document.getElementById('sn-res-email').innerText = emailFormat;
+                    
+                    currentSniperLead = {
+                        id: generateId(),
+                        name: fullName,
+                        company: domain,
+                        email: emailFormat,
+                        role: data.data.position || "Unknown (Sniper)",
+                        country: "Unknown",
+                        status: "New",
+                        date: formatDate(new Date())
+                    };
+
+                    document.getElementById('sniper-result').classList.remove('hidden');
+                } else {
+                    showToast("Could not verify email format via Hunter.", true);
+                }
+
+            } catch (error) {
+                document.getElementById('sniper-loading').classList.add('hidden');
+                showToast("Email not found or API error. Check console.", true);
+                console.error("Sniper Error:", error);
+            }
+        });
+
+        function saveSniperLead() {
+            if(currentSniperLead) {
+                addLeadToCRM(currentSniperLead);
+                document.getElementById('sniper-result').classList.add('hidden');
+                document.getElementById('sniper-form').reset();
+                currentSniperLead = null;
+            }
+        }
+
+        // --- MODULE 4: CRM LOGIC ---
+        function renderCRM() {
+            const tbody = document.getElementById('crm-table-body');
+            const emptyState = document.getElementById('crm-empty');
+            
+            tbody.innerHTML = '';
+            
+            if (crmData.length === 0) {
+                tbody.parentElement.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+                return;
+            }
+
+            tbody.parentElement.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+            emptyState.classList.remove('flex');
+
+            crmData.forEach((lead, index) => {
+                const row = `
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${lead.date}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">${lead.name}</div>
+                            <div class="text-sm text-gray-500">${lead.role}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900 font-medium">${lead.company}</div>
+                            <div class="text-sm text-blue-600 font-mono">${lead.email}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${lead.country}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <select onchange="updateLeadStatus('${lead.id}', this.value)" class="text-xs bg-gray-100 border-none rounded py-1 px-2 text-gray-700 outline-none cursor-pointer focus:ring-2 focus:ring-blue-500">
+                                <option value="New" ${lead.status === 'New' ? 'selected' : ''}>New</option>
+                                <option value="Contacted" ${lead.status === 'Contacted' ? 'selected' : ''}>Contacted</option>
+                                <option value="Meeting Set" ${lead.status === 'Meeting Set' ? 'selected' : ''}>Meeting Set</option>
+                            </select>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button onclick="deleteLead('${lead.id}')" class="text-red-400 hover:text-red-600 p-1 rounded hover:bg-red-50 transition-colors">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                tbody.insertAdjacentHTML('beforeend', row);
+            });
+            lucide.createIcons();
+        }
+
+        async function updateLeadStatus(id, newStatus) {
+            if(isFirebaseReady) {
+                try {
+                    await updateDoc(doc(db, 'leads', id), { status: newStatus });
+                } catch(e) {
+                    console.error("Update failed", e);
+                }
+            } else {
+                const idx = crmData.findIndex(l => l.id === id);
+                if (idx > -1) crmData[idx].status = newStatus;
+            }
+        }
+
+        async function deleteLead(id) {
+            if(isFirebaseReady) {
+                try {
+                    await deleteDoc(doc(db, 'leads', id));
+                } catch(e) {
+                    console.error("Delete failed", e);
+                }
+            } else {
+                crmData = crmData.filter(l => l.id !== id);
+                renderCRM();
+                updateKPI();
+            }
+        }
+
+        function exportCSV() {
+            if (crmData.length === 0) {
+                showToast("No leads to export. Add some leads first!", true);
+                return;
+            }
+
+            const headers = ["Date", "Name", "Role", "Company Domain", "Email", "Location", "Status"];
+            const csvRows = [headers.join(',')];
+
+            crmData.forEach(lead => {
+                const values = [ lead.date, `"${lead.name}"`, `"${lead.role}"`, lead.company, lead.email, `"${lead.country}"`, lead.status ];
+                csvRows.push(values.join(','));
+            });
+
+            const csvContent = csvRows.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `LeadGen_Export_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Initialize empty state
+        updateKPI();
+    </script>
+</body>
+</html>
