@@ -795,8 +795,7 @@
             try {
                 const prompt = `You are an expert B2B lead generation researcher. I want to find companies in the "${industry}" industry targeting or located in "${locData.loc}". My base search is: "${baseKeyword}". Rephrase this into 10 different highly effective Google search queries to find business websites. Return ONLY a valid JSON array of 10 strings, with no markdown formatting or extra text.`;
 
-                // Safe model reference updated for global deployment
-                const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+                const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`;
                 
                 const geminiRes = await fetch(geminiUrl, {
                     method: 'POST',
@@ -807,9 +806,10 @@
                     })
                 });
 
-                if (!geminiRes.ok) throw new Error(`Failed to reach Gemini API.`);
+                if (!geminiRes.ok) throw new Error(`Failed to reach Gemini API. Status: ${geminiRes.status}`);
                 
                 const geminiData = await geminiRes.json();
+                
                 let rawText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text;
                 if (!rawText) throw new Error("Empty response from Gemini API");
                 
